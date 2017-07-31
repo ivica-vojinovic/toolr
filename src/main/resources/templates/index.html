@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:lang="${#locale}">
+<head>
+    <title th:text="#{application.title}">Toolr</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        /* Remove the navbar's default rounded borders and increase the bottom margin */
+        .navbar {
+            margin-bottom: 50px;
+            border-radius: 0;
+        }
+
+        /* Remove the jumbotron's default bottom margin */
+        .jumbotron {
+            margin-bottom: 0;
+        }
+
+        /* Add a gray background color and some padding to the footer */
+        footer {
+            background-color: #f2f2f2;
+            padding: 25px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="jumbotron">
+    <div class="container text-center">
+        <h1>Toolr</h1>
+    </div>
+
+    <!-- Display login or signup errors -->
+    <!--/*@thymesVar id="loginError" type="java.lang.String"*/-->
+    <div style="display: none" th:style="'display: inline'" th:if="${loginError != null}">
+        <div id="login-error" th:text="${loginError}" class="alert alert-danger col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">Login
+            error.
+        </div>
+        <br>
+    </div>
+</div>
+
+<!--/*@thymesVar id="authUser" type="net.ivica.reservations.api.UserProfile"*/-->
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarTop">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Logo</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarTop">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#">Administration</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li style="display: none" th:style="'display: inline'" id="auth-username" th:if="${authUser != null}"><a
+                        th:text="${'Hi, ' + authUser.getFirstName()}" href="#"><span
+                        class="glyphicon glyphicon-user"></span> Hi, User</a></li>
+                <li style="display: inline" th:style="'display: inline'" th:if="${authUser == null}"><a
+                        name="login-modal-link" href="#" data-toggle="modal" data-target="#login-modal"><span
+                        class="glyphicon glyphicon-log-in"></span> Log In</a></li>
+                <li style="display: none" th:style="'display: inline'" th:if="${authUser != null}"><a
+                        href="/logout.html"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div id="login-modal" class="modal fade" role="dialog">
+    <div id="login-box" class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">Sign In</div>
+                <div style="float:right; font-size: 80%; position: relative; top:-10px">
+                    <a href="#">Forgot password?</a>
+                </div>
+            </div>
+
+            <div style="padding-top:30px" class="panel-body">
+                <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+
+                <form id="login-form" th:action="@{/index.html}" method="post" class="form-horizontal" role="form">
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input id="login-username" type="text" class="form-control" name="username"
+                               placeholder="username">
+                    </div>
+
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                        <input id="login-password" type="password" class="form-control" name="password"
+                               placeholder="password">
+                    </div>
+
+                    <div class="input-group">
+                        <div class="checkbox">
+                            <label>
+                                <input id="login-remember" type="checkbox" name="remember" value="1"> Remember me
+                            </label>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:10px" class="form-group">
+                        <div class="col-sm-12 controls">
+                            <button name="login-button" type="submit" class="btn btn-success">Login</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12 control">
+                            <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
+                                Don't have an account!
+                                <a href="#" onClick="$('#loginbox').hide(); $('#signupbox').show()">
+                                    Sign Up Here
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="signup-box" style="display:none;" class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">Sign Up</div>
+                <div style="float:right; font-size: 85%; position: relative; top:-10px">
+                    <a id="signinlink" href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">Sign In</a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <form id="signup-form" class="form-horizontal" role="form">
+                    <div id="signupalert" style="display:none" class="alert alert-danger">
+                        <p>Error:</p>
+                        <span></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="col-md-3 control-label">Email</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="email" placeholder="Email Address">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="firstname" class="col-md-3 control-label">First Name</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="firstname" placeholder="First Name">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastname" class="col-md-3 control-label">Last Name</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="lastname" placeholder="Last Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-md-3 control-label">Password</label>
+                        <div class="col-md-9">
+                            <input type="password" class="form-control" id="password" placeholder="Password">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-9">
+                            <button id="btn-signup" type="button" class="btn btn-info"><i class="icon-hand-right"></i>
+                                &nbsp Sign Up
+                            </button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br>
+
+<footer class="container-fluid text-center">
+    <p>Toolr Copyright</p>
+</footer>
+
+</body>
+</html>
