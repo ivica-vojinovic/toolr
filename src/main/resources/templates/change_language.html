@@ -24,7 +24,7 @@
     <img src="../static/en-flag.png" th:src="@{en-flag.png}"/>
 </a>
 <p th:if="${loginError}" class="error" th:text="#{login.page.loginError}">Wrong user or password</p>
-<form th:action="@{/templates/login_backup.html}" method="post">
+<form th:action="@{/login.html}" method="post">
     <label for="username" th:text="#{login.page.username}">Username</label>:
     <input type="text" id="username" name="username" autofocus="autofocus"/> <br/>
     <label for="password" th:text="#{login.page.password}">Password</label>:
